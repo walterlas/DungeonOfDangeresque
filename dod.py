@@ -22,6 +22,8 @@ def getDifficulty():			#Line 5530
 		difficulty = int(n)
 	return(n)
 
+def getLevels():
+	global
 def getName():
 	n = input("Enter your character's name > ")
 	o = str(n)
