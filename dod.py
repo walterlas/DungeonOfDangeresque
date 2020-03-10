@@ -13,6 +13,8 @@ from os import system, name
 from time import sleep
 from dodfun import cls, rnd, delay, playerObject, monsterObject, levelObject
 
+debug	= True
+
 ## Functions ##
 def getDifficulty():			#Line 5530
 	difficulty	= 0
@@ -23,7 +25,14 @@ def getDifficulty():			#Line 5530
 	return(n)
 
 def getLevels():
-	global
+	deep	= 0
+	while deep == 0:
+		levels=input("How many levels deep do you want to start? ")
+		levels=int(levels)
+		if (levels >0) and (levels <= 5):
+			deep = 1
+	return(levels)
+	
 def getName():
 	n = input("Enter your character's name > ")
 	o = str(n)
@@ -114,34 +123,25 @@ def showMap():		# Line 1570 & 1990
 					print("Pl ",end=" ")
 					continue
 				else:
-					idx = getIndex(n,q,9)
+					idx = level[currentlevel].getIndex(n,q)
 					s1	= level[currentlevel].map[idx]
 					if s1 == 1:
-#						pass()		# Line 2910
 						print("O  ",end=" ")
 					elif s1 == 2:
-#						pass()		# Line 2970
 						print("C  ",end=" ")
 					elif s1 == 3:
-#						pass()		# Line 2930
 						print("M  ",end=" ")
 					elif s1 == 4:
-#						pass()		# Line 2930
 						print("M  ",end=" ")
 					elif s1 == 5:
-#						pass()		# Line 2950
 						print("?  ",end=" ")
 					elif s1 == 6:
-#						pass()		# Line 2990
 						print("NS ",end=" ")
 					elif s1 == 7:
-#						pass()		# Line 3010
 						print("EW ",end=" ")
 					elif s1 == 8:
-#						pass()		# Line 3030
 						print("?  ",end=" ")
 					elif s1 == 9:
-#						pass()		# Line 3040
 						print("UP ",end=" ")
 			print("\n")
 	dummy = input("~~Press Enter to Continue~~")
@@ -247,11 +247,12 @@ def deadMonster():	# Line 4890
 	delay(2)
 	print(f'and find ... {givegold} gold pieces')
 	player.monsterskilled = player.monsterskilled + 1
+	player.totalkills = player.totalkills + 1
 	if player.haskey != True:
-		if level == 1:
-			checkKey()	# GOTO 3190
-		else:
-			getKey()	# GOTO 3110
+#		if level == 1:
+		checkKey()	# GOTO 3190
+#		else:
+#			getKey()	# GOTO 3110
 	return	
 
 def monsterAttacks():	# Line 4780
@@ -469,8 +470,9 @@ def goUpstairs():	# Line 1480
 					delay(1)
 					print(f'Your hit points are restored to {initialHP}')
 					print(" ")
-					bmonsterskilled = player.monsterskilled+k4
-					print("You are at..... Level 1")
+#					bmonsterskilled = player.monsterskilled+k4
+					player.monsterskilled = 0
+					print(f"You are at..... Level {currentlevel}")
 					delay(2)
 					return
 		else:
@@ -564,6 +566,7 @@ def findVial():	# Line 4210
 	cls()
 	if dl >= 3:
 		h=int(rnd()*10/difficulty+1)+(6/difficulty)
+		h=int(h)
 		player.incHP(h)
 		print("It was a white magic potion...")
 		print(f'Which increased your hit-points by {h}')
@@ -571,6 +574,7 @@ def findVial():	# Line 4210
 		print("The liquid had no effect on you.")
 	else:
 		h=int(rnd()*6+1)*difficulty
+		h=int(h)
 		player.decHP(h)
 		print("You feel a little funny...")
 		delay(4)
@@ -774,20 +778,37 @@ def hiddenCavern():	# Line 4060
 	delay(2)
 	print("Cautiously, you walk towards the sound.")
 	delay(2)
-	w=int(rnd()*4+1)	# Line 4160
-	if initialHP < player.hp:
-		if w == 2:	# GOTO 5170
-			somethingJumps()
-			giantSpider()
-	else:
-		if w == 1:	# GOTO 5040
-			somethingJumps()
-			mrWizard()
-		elif (w == 4) and level == 2:	
-			fallInPool()				# GOTO 5720
-		else:
-			somethingJumps()
-			darkWizard()				# GOTO 5230
+#	Fixed the logic here. Should be rolled into DoDv1
+	w	= int(rnd()*4+1)
+	if (w == 1) and (player.hp < initialHP):
+		somethingJumps()
+		mrWizard()
+	elif (w == 2):
+		somethingJumps()
+		giantSpider()
+	elif (w == 4) and (currentlevel > 1):
+		fallInPool()
+	else
+		somethingJumps()
+		darkWizard()
+		
+#	w=int(rnd()*4+1)	# Line 4160
+#	if (initialHP < player.hp) and (w == 2):
+##		if w == 2:	# GOTO 5170
+#		somethingJumps()
+#		giantSpider()
+#	else:
+#		if w == 1:	# GOTO 5040
+#			somethingJumps()
+#			mrWizard()
+#		if w == 2:
+#			somethingJumps()
+#			giantSpider()
+#		elif (w == 4) and currentlevel > 1:	
+#			fallInPool()				# GOTO 5720
+#		else:
+#			somethingJumps()
+#			darkWizard()				# GOTO 5230
 	return
 	
 def introTop():
@@ -817,14 +838,17 @@ def introBottom():
 	delay(3)
 	cls()
 	print("You have arrived at . . . ")
-	print("The Dungeon of Danger . . . Level 2")
+	print(f"The Dungeon of Danger . . . Level {currentlevel}")
 	print(" ")
 	print("You will encounter monsters and thieves and . . . gold.")
 	print("Good luck!")
+	delay(3)
 	return
 
 def showCommands():
-	print(f"Player X = {player.x}   Player Y = {player.y}  Room Type = {inroom}")
+	if debug:
+		print(f"Player X = {player.x}   Player Y = {player.y}  Room Type = {inroom} Level = {currentlevel}")
+		print(f"Monsters Killed (level)= {player.monsterskilled}  Monsters Killed (total) = {player.totalkills}")
 	print(f'Hit Points: {player.hp}  Gold: {player.gold}')
 	print(f'{player.name}, what is your action or move?')
 	print("(N)orth, (E)ast, (S)outh, (W)est")
@@ -845,8 +869,10 @@ def showLevels():
 level	= [1]
 player	= playerObject
 monster = monsterObject
-level.append(levelObject())
-level.append(levelObject())
+#currentlevel	= int(rnd()*5)+6
+#for i in range(1,currentlevel):
+#	level.append(levelObject())
+##level.append(levelObject())
 
 debug	= False
 
@@ -872,17 +898,20 @@ while gameloop:
 	if (onload == True):	# Do stuff for the first (and only) time
 		introTop()
 		monsterInfo	= monsterSetup()
+		for i in range(1,51):
+			level.append(levelObject())
 		onload		= False
-		level[1].createMap()
-		level[2].createMap()
-	
+			
 	if (newgame == True):	# Do stuff needed for a new game
 		introMiddle()
-		level[1].fillMap()
-		level[2].fillMap()
+		currentlevel	= int(rnd()*5)+6
+		for i in range(1,currentlevel):
+			level[i].createMap()
+			level[i].fillMap()
+#		level[2].fillMap()
 		player.x				= int(rnd()*8+1)
 		player.y				= int(rnd()*8+1)
-		currentlevel			= 2
+#		currentlevel			= 2
 		index					= level[currentlevel].getIndex(player.x,player.y)
 		level[2].setMap(player.x,player.y,1)
 		player.movesdepleted	= False
@@ -894,7 +923,10 @@ while gameloop:
 		initialHP				= 20+int(rnd()*15+1)
 		initialHP				= int(initialHP/difficulty)
 		targetKills				= int(rnd()*4+1)+4
+		player.monsterskilled	= 0
+		player.totalkills		= 0
 		player.name				= getName()
+#		currentlevel			= getLevels()
 		player.hp				= initialHP
 		delay(2)
 		introBottom()

@@ -24,16 +24,17 @@ def rnd():
 	return(random())
 
 class playerObject:
-	name	= 'name'
-	hp		= 1
-	x		= 0
-	y		= 0
-	oldx	= 0
-	oldy	= 0
-	gold	= 500
-	turnstaken	= 0
-	turnsleft	= 100
+	name			= 'name'
+	hp				= 1
+	x				= 0
+	y				= 0
+	oldx			= 0
+	oldy			= 0
+	gold			= 500
+	turnstaken		= 0
+	turnsleft		= 100
 	monsterskilled	= 0
+	totalkills		= 0
 	haskey			= False
 	hasmap			= False
 	dead			= False
