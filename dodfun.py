@@ -23,6 +23,13 @@ def cls():
 def rnd():
 	return(random())
 
+def showFile(filename):
+	file	= open(filename,'r')
+	msg		= file.read()
+	file.close()
+	print(msg)
+	return
+	
 class playerObject:
 	name			= 'name'
 	hp				= 1

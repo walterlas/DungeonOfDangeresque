@@ -11,9 +11,8 @@ from random import random
 #from tools import getIndex, createGrid, showGrid
 from os import system, name
 from time import sleep
-from dodfun import cls, rnd, delay, playerObject, monsterObject, levelObject
+from dodfun import cls, rnd, delay, playerObject, monsterObject, levelObject,showFile
 
-debug	= True
 
 ## Functions ##
 def getDifficulty():			#Line 5530
@@ -431,8 +430,10 @@ def trapDoor():		# Line 2610		Not sure this is right, either
 			intoPit()
 			return
 		currentlevel = currentlevel + 1
+		if currentlevel > maxlevel:
+			currentlevel = maxlevel
 		print(" ")
-		player.haskey = True
+#		player.haskey = True
 		print(f"You fell thru to level {currentlevel} . . . and")
 		delay(1)
 		intoPit()
@@ -788,7 +789,7 @@ def hiddenCavern():	# Line 4060
 		giantSpider()
 	elif (w == 4) and (currentlevel > 1):
 		fallInPool()
-	else
+	else:
 		somethingJumps()
 		darkWizard()
 		
@@ -813,10 +814,14 @@ def hiddenCavern():	# Line 4060
 	
 def introTop():
 	cls()
-	print("The Dungeon of Danger".center(40))
+	showFile("./DungeonOfDangeresque-Logo.txt")
+	delay(2)
+	print("\n")
+	print("The Dungeon of Dangeresque".center(40))
 	print("   For Python 3".center(40))
 	print("(c) 1980 by Howard Berenbon".center(40))
 	print("Adapted from Atari BASIC verson".center(40))
+	print("Of 'Dunger of Danger'".center(40))
 	print(" ")
 	print("A Fantasy Game".center(40))
 	print("=-=-=-=-=-=-=-=-=-=-".center(40))
@@ -825,7 +830,7 @@ def introTop():
 	return
 
 def introMiddle():
-	print("The Dungeon of Danger")
+	print("The Dungeon of Dangeresque!")
 	print(" ")
 	return
 
@@ -836,7 +841,8 @@ def introBottom():
 	delay(1)
 	print(f'{player.name} . . . You are on your way.')
 	delay(3)
-	cls()
+#	cls()
+	print("\n\n\n")
 	print("You have arrived at . . . ")
 	print(f"The Dungeon of Danger . . . Level {currentlevel}")
 	print(" ")
@@ -849,6 +855,8 @@ def showCommands():
 	if debug:
 		print(f"Player X = {player.x}   Player Y = {player.y}  Room Type = {inroom} Level = {currentlevel}")
 		print(f"Monsters Killed (level)= {player.monsterskilled}  Monsters Killed (total) = {player.totalkills}")
+		print(f"Has Key = {player.haskey}  Has Map = {player.hasmap}")
+		print("\n\n")
 	print(f'Hit Points: {player.hp}  Gold: {player.gold}')
 	print(f'{player.name}, what is your action or move?')
 	print("(N)orth, (E)ast, (S)outh, (W)est")
@@ -874,7 +882,7 @@ monster = monsterObject
 #	level.append(levelObject())
 ##level.append(levelObject())
 
-debug	= False
+debug	= True
 
 difficulty	= 1
 maxlevels	= 2
@@ -905,6 +913,7 @@ while gameloop:
 	if (newgame == True):	# Do stuff needed for a new game
 		introMiddle()
 		currentlevel	= int(rnd()*5)+6
+		maxlevel		= currentlevel
 		for i in range(1,currentlevel):
 			level[i].createMap()
 			level[i].fillMap()
@@ -951,6 +960,7 @@ while gameloop:
 	elif	inroom	== 9:
 		print("You are at a stairway")
 		print(". . . . . . going up")
+
 	print(" ")
 	if player.dead:
 		playerDead()
