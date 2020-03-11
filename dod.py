@@ -111,7 +111,9 @@ def flourish():				# This needs to be re-done
 def showMap():		# Line 1570 & 1990
 	cls()
 	if (player.hasmap == False):
-		print("You don't have the map.")
+#		print("You don't have the map.")
+		print("You pat your pockets looking for your map")
+		print("before you remember you don't have one.")
 		delay(1)
 	else:
 		print(f"The Dungeon of Danger Map: Level {currentlevel}")
@@ -164,6 +166,39 @@ def getKey():		# Line 3110
 def checkKey():		# Line 3190
 	if player.monsterskilled >= targetKills:
 		getKey()	# GOTO 3110
+	return
+
+def teleportTrap():
+	global teleportactive
+	global player
+
+	if teleportactive == False:
+		teleportactive = True
+		print("You activated some sort of trap . . . ")
+		delay(1)
+		teleportx = player.x
+		teleporty = player.y
+		player.x = int(rnd()*8+1)
+		player.y = int(rnd()*8+1)
+		player.oldx = player.x
+		player.oldy = player.y
+		print("Suddenly you feel dizzy, and pass out")
+		delay(2)
+		flourish()
+		print("When you wake up . . . you find")
+		print("that you were . . . . teleported")
+		print("to an unknown location . . . . ")
+		delay(2)
+	else:
+		teleportactive = False
+		print("You reactivated the teleportation trap")
+		delay(1)
+		flourish()
+		delay(1)
+		print("You end up back in the area where")
+		print(". . . you last teleported from")
+		player.x = teleportx
+		player.y = teleporty
 	return
 
 def playerDead():
@@ -308,7 +343,7 @@ def flee():		# Line 4700
 	player.x = player.oldx
 	player.y = player.oldy
 	print("You quickly run out . . .")
-	if tl == 1:
+	if teleportactive:	# Use teleportactive = True
 		teleportTrap()	# GOTO 5560
 	n = int(rnd()*2+1)
 	delay(2)
@@ -466,7 +501,7 @@ def goUpstairs():	# Line 1480
 			if currentlevel  == 0:
 				gameWon()
 			else:
-				player.hasmap = False
+#				player.hasmap = False
 				player.haskey = False
 				k4 = int(rnd()*4+1)+1
 				if player.hp < initialHP:
@@ -477,6 +512,10 @@ def goUpstairs():	# Line 1480
 					print(" ")
 #					bmonsterskilled = player.monsterskilled+k4
 					player.monsterskilled = 0
+					print("The enchanted key melts into the lock!")
+					if player.hasmap:
+						print("Your map turns to dust!")
+						player.hasmap = False
 					print(f"You are at..... Level {currentlevel}")
 					delay(2)
 					return
@@ -488,7 +527,10 @@ def goUpstairs():	# Line 1480
 
 def corridor():		# Line 3240
 	global monster
-	
+
+	if (player.x == player.oldx) and (player.y == player.oldy):
+		return
+
 	print("The door closes and locks behind you")
 	delay(1)
 	w = int(rnd()*8+1)
@@ -927,6 +969,7 @@ while gameloop:
 		player.x				= int(rnd()*8+1)
 		player.y				= int(rnd()*8+1)
 #		currentlevel			= 2
+		teleportactive			= False
 		index					= level[currentlevel].getIndex(player.x,player.y)
 		level[2].setMap(player.x,player.y,1)
 		player.movesdepleted	= False
