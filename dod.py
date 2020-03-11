@@ -436,7 +436,11 @@ def trapDoor():		# Line 2610		Not sure this is right, either
 #		player.haskey = True
 		print(f"You fell thru to level {currentlevel} . . . and")
 		delay(1)
-		intoPit()
+		print("you. . . . . . . . lost")
+		print("all of your gold pieces")
+		player.gold = 0
+		if (player.haskey):
+			print("But you still have your key.")
 		return
 	else:
 		print("But . . . you caught yourself")
@@ -814,6 +818,8 @@ def hiddenCavern():	# Line 4060
 	
 def introTop():
 	cls()
+	showFile("./intro.txt")
+	delay(5)
 	showFile("./DungeonOfDangeresque-Logo.txt")
 	delay(2)
 	print("\n")
@@ -937,6 +943,7 @@ while gameloop:
 		player.name				= getName()
 #		currentlevel			= getLevels()
 		player.hp				= initialHP
+		player.startinghp		= initialHP
 		delay(2)
 		introBottom()
 		inroom 					= level[currentlevel].roomContents(player.x,player.y)

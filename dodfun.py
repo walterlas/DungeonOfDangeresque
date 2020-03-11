@@ -46,6 +46,8 @@ class playerObject:
 	hasmap			= False
 	dead			= False
 	movesdepleted	= False
+	startinghp		= 0
+	healthturn		= 0
 	
 	def decHP(x):
 		playerObject.hp = playerObject.hp - x
@@ -62,6 +64,17 @@ class playerObject:
 		playerObject.turnsleft	= playerObject.turnsleft - 1
 		if playerObject.turnsleft == 0:
 			playerObject.movesdepleted = True
+		if playerObject.hp < playerObject.startinghp:
+			playerObject.healthturn = playerObject.healthturn + 1
+			if playerObject.healthturn > 5:
+				playerObject.hp = playerObject.hp + int(rnd()*5)+1
+				if playerObject.hp > playerObject.startinghp:
+					playerObject.hp = playerObject.startinghp
+					print("You feel like your old self again.")
+				playerObject.healthturn = 0
+				print("You're feeling slightly better.")
+		else:
+			playerObject.healthturn = 0
 		return
 		
 	def move(c,d):
@@ -86,10 +99,14 @@ class monsterObject:
 		return
 
 class levelObject:
+
 	map		= []
 	mx		= 9
 	my		= 9
 	
+	def __init__(self):
+		return
+		
 	def createMap(self):
 		for i in range(0,self.mx*self.my):
 			self.map.append(i)
