@@ -1,5 +1,5 @@
-####           The Dungeon of Danger                   ####   
-####        (c) 1980 by Howard Berenbon                ####
+####           The Dungeon of Dangeresque              ####   
+####    (c) 1980 Original by Howard Berenbon           ####
 #### Transcribed from:                                 ####
 #### Mostly BASIC: Applications for your Atari, Book 2 ####
 #### Published by Howard W. Sams & Co., Inc            ####
@@ -8,7 +8,6 @@
 
 ## Imports ##
 from random import random
-#from tools import getIndex, createGrid, showGrid
 from os import system, name
 from time import sleep
 from dodfun import cls, rnd, delay, playerObject, monsterObject, levelObject,showFile
@@ -82,6 +81,38 @@ def getRating(r):
 		retrate = "Dungeon Master!"
 	return(retrate)
 
+#def emptyScores(scores,file)
+#	for i in range(0,9):
+#		scoretable[0].append("Nobody")
+#		scoretable[1].append(0)
+#		scoretable[2].append(0)
+#		scoretable[3].append(0)
+#		scoretable[4].append(0)
+#		scoretable[5].append(0)
+#		scoretable[6].append("Never happened")
+#	scores = open(file,'w')
+#	for i in range(0,9):
+#		file.write(scoretable[i])
+#	file.close()
+#	return(scoretable)
+#	
+#def scoreTable():
+#	## Create hiscore.txt if it doesn't exist
+#	## Populate with dummy scores
+#	## Save empty file
+#	scoretable=[[][][][][][][]]
+#	hsfile="./hiscore.txt"
+#	while true:
+#		try:
+#			scores = open(hsfile,'r')
+#		except FileNotFoundError:
+#			scoretable = emptyScores(scoretable,hsfile)
+#		else:
+#			break
+#	for i in range(0,9):
+#		scoretable[i] = scores.read()
+#	return
+
 def gameWon():		# Line 890
 	print("You found your way...")
 	print("... Out of the Dungeon of Danger")
@@ -111,7 +142,6 @@ def flourish():				# This needs to be re-done
 def showMap():		# Line 1570 & 1990
 	cls()
 	if (player.hasmap == False):
-#		print("You don't have the map.")
 		print("You pat your pockets looking for your map")
 		print("before you remember you don't have one.")
 		delay(1)
@@ -154,18 +184,14 @@ def getMap():
 	print("You. . . . . find a map")
 	return
 
-def getKey():		# Line 3110
+def checkKey():		# Line 3190
 	global player
 	
-	player.haskey = True
-	print("\nYou look to the ground......")
-	print("and find the Enchanted Key!")
-	delay(2)
-	return
-
-def checkKey():		# Line 3190
-	if player.monsterskilled >= targetKills:
-		getKey()	# GOTO 3110
+	if (player.monsterskilled >= targetKills):
+		player.haskey = True
+		print("\nYou look to the ground......")
+		print("and find the Enchanted Key!")
+		delay(2)
 	return
 
 def teleportTrap():
@@ -202,7 +228,6 @@ def teleportTrap():
 	return
 
 def playerDead():
-	global dy
 	global player
 	global newgame
 	
@@ -238,7 +263,7 @@ def playerDead():
 		print("of the Dungeon of Danger.")
 		delay(2)
 		flourish()
-	else:		# Kube 1710
+	else:		# Kube 1710 (that's what happens when you type with your hands shifted one key to the left
 		print("You lost all your gold and you were")
 		print("... unable to meet the demands of")
 		print(".....The Dungeon of Danger")
@@ -445,7 +470,7 @@ def intoPit():		# Not 100% sure this is all correct
 		print("But . . . you still have your key")
 	return
 	
-def trapDoor():		# Line 2610		Not sure this is right, either
+def trapDoor():		# Line 2610		Pretty sure it's correct now
 	global currentlevel
 	global player
 	
@@ -455,13 +480,13 @@ def trapDoor():		# Line 2610		Not sure this is right, either
 	if trap > 4:
 		print("You fell thru . . . ")
 		delay(2)
-		pass		# GOTO 1720
+		# GOTO 1720
 		player.dead = True
 		return
 	elif trap == 4:
-		pass		# GOTO 2690
+		# GOTO 2690
 		if currentlevel > 1:
-			pass	# GOTO 2800
+			# GOTO 2800
 			intoPit()
 			return
 		currentlevel = currentlevel + 1
@@ -598,6 +623,7 @@ def findVial():	# Line 4210
 	delay(2)
 	v=int(rnd()*7+1)
 	if v < 5:
+		print("... But you don't see anything of any interest.")
 		return
 	print("On the ground, at your feet, is a vial.")
 	delay(2)
@@ -838,31 +864,13 @@ def hiddenCavern():	# Line 4060
 	else:
 		somethingJumps()
 		darkWizard()
-		
-#	w=int(rnd()*4+1)	# Line 4160
-#	if (initialHP < player.hp) and (w == 2):
-##		if w == 2:	# GOTO 5170
-#		somethingJumps()
-#		giantSpider()
-#	else:
-#		if w == 1:	# GOTO 5040
-#			somethingJumps()
-#			mrWizard()
-#		if w == 2:
-#			somethingJumps()
-#			giantSpider()
-#		elif (w == 4) and currentlevel > 1:	
-#			fallInPool()				# GOTO 5720
-#		else:
-#			somethingJumps()
-#			darkWizard()				# GOTO 5230
 	return
 	
 def introTop():
 	cls()
 	showFile("./intro.txt")
 	delay(5)
-	showFile("./DungeonOfDangeresque-Logo.txt")
+#	showFile("./DungeonOfDangeresque-Logo.txt")
 	delay(2)
 	print("\n")
 	print("The Dungeon of Dangeresque".center(40))
@@ -878,7 +886,9 @@ def introTop():
 	return
 
 def introMiddle():
-	print("The Dungeon of Dangeresque!")
+#	print("The Dungeon of Dangeresque!")
+	print("The...")
+	showFile("./DungeonOfDangeresque-Logo.txt")
 	print(" ")
 	return
 
@@ -911,11 +921,9 @@ def showCommands():
 	print("(U)p, (M)ap")
 	return
 
-def showLevels():
-#	print(level1)
+def showLevels():	# I can probably get rid of this
 	showGrid(level1,9)
 	print("------------------------------")
-#	print(level2)
 	showGrid(level2,9)
 	print("------------------------------")
 	bummer=input("Press ENTER")
@@ -925,10 +933,6 @@ def showLevels():
 level	= [1]
 player	= playerObject
 monster = monsterObject
-#currentlevel	= int(rnd()*5)+6
-#for i in range(1,currentlevel):
-#	level.append(levelObject())
-##level.append(levelObject())
 
 debug	= True
 
@@ -941,13 +945,13 @@ onload		= True
 gameloop	= True
 
 ## Unknown Variables ##
-tl	= 0
-cb	= 0	## Random monster amount to get key?
-md	= 0
-te	= 1
-dy	= 1
-f	= ' '
-
+#tl	= 0
+#cb	= 0	## Random monster amount to get key?
+#md	= 0
+#te	= 1
+#dy	= 1
+#f	= ' '
+#
 #### Main Game Loop ####
 while gameloop:
 
@@ -965,10 +969,8 @@ while gameloop:
 		for i in range(1,currentlevel):
 			level[i].createMap()
 			level[i].fillMap()
-#		level[2].fillMap()
 		player.x				= int(rnd()*8+1)
 		player.y				= int(rnd()*8+1)
-#		currentlevel			= 2
 		teleportactive			= False
 		index					= level[currentlevel].getIndex(player.x,player.y)
 		level[2].setMap(player.x,player.y,1)
@@ -984,7 +986,6 @@ while gameloop:
 		player.monsterskilled	= 0
 		player.totalkills		= 0
 		player.name				= getName()
-#		currentlevel			= getLevels()
 		player.hp				= initialHP
 		player.startinghp		= initialHP
 		delay(2)
@@ -1053,6 +1054,8 @@ while gameloop:
 	elif pmove.upper()	== 'U':
 		goUpstairs()
 	elif pmove.upper()	== 'M':
+		showMap()
+	elif pmove.upper()	== 'Z':
 		showMap()
 	elif pmove.upper()	== 'Q':
 		quit()

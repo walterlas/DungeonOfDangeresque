@@ -71,8 +71,9 @@ class playerObject:
 				if playerObject.hp > playerObject.startinghp:
 					playerObject.hp = playerObject.startinghp
 					print("You feel like your old self again.")
-				playerObject.healthturn = 0
-				print("You're feeling slightly better.")
+				else:
+					playerObject.healthturn = 0
+					print("You're feeling slightly better.")
 		else:
 			playerObject.healthturn = 0
 		return
