@@ -203,7 +203,7 @@ def flourish():				# This needs to be re-done
 
 def showMap():		# Line 1570 & 1990
 	cls()
-	if (player.hasmap == False) and debug == False:
+	if (player.hasmap == False):
 		print("You pat your pockets looking for your map")
 		print("before you remember you don't have one.")
 		delay(1)
@@ -237,8 +237,9 @@ def showMap():		# Line 1570 & 1990
 					elif s1 == 9:
 						print("UP ",end=" ")
 			print("\n")
-	if debug:
-		level[currentlevel].showMap()
+#	if debug:
+#		level[currentlevel].showMap()
+
 	dummy = input("~~Press Enter to Continue~~")
 	return
 
@@ -599,15 +600,14 @@ def goUpstairs():	# Line 1480
 					delay(1)
 					print(f'Your hit points are restored to {initialHP}')
 					print(" ")
-#					bmonsterskilled = player.monsterskilled+k4
-					player.monsterskilled = 0
-					print("The enchanted key melts into the lock!")
-					if player.hasmap:
-						print("Your map turns to dust!")
-						player.hasmap = False
-					print(f"You are at..... Level {currentlevel}")
-					delay(2)
-					return
+				player.monsterskilled = 0
+				print("The enchanted key melts into the lock!")
+				if player.hasmap:
+					print("Your map turns to dust!")
+					player.hasmap = False
+				print(f"You are at..... Level {currentlevel}")
+				delay(2)
+				return
 		else:
 			print("\nYou cannot go up the stairway.")
 			print("You don't have the key.")
@@ -995,6 +995,30 @@ def showLevels():	# I can probably get rid of this
 	bummer=input("Press ENTER")
 	return
 	
+def fillMap():
+	map = []
+	n	= 0
+	for i in range(0,9*9):
+		map.append(i)
+	
+	for y in range(1,9):
+		for x in range(1,9):
+			i = x+(9*y)
+			map[i] = int(rnd()*7+1)
+	h	= int(rnd()*3+1)
+	for n in range(1,h+1):
+		x	= int(rnd()*8)
+		y	= int(rnd()*8)
+		i	= x+(9*y)
+		map[i]	= 8
+	s	= int(rnd()*4+1)+2
+	for n in range(1,s+1):
+		x	= int(rnd()*8+1)
+		y	= int(rnd()*8+1)
+		i	= x+(9*y)
+		map[i]	= 9
+	return(map)
+	
 ## Known Variables ##
 level	= [1]
 player	= playerObject
@@ -1032,15 +1056,11 @@ while gameloop:
 		introMiddle()
 		currentlevel	= int(rnd()*5)+6
 		maxlevel		= currentlevel
-		for i in range(1,currentlevel):
+		for i in range(1,currentlevel+1):
 			level[i].createMap()
 #			level[i].fillMap()
-			level[i].map = fillArray(9,9)
-#			fillMap(i)
-#			if debug:
-#				level[i].showMap()
-#				print(f"Making map for level {i}")
-#				print(level[i])
+#			level[i].map = fillArray(9,9)
+			level[i].map = fillMap()
 		player.x				= int(rnd()*8+1)
 		player.y				= int(rnd()*8+1)
 		teleportactive			= False
