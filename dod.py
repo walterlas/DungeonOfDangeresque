@@ -7,7 +7,7 @@
 ####             Python Version 1.00                   ####
 
 ## Imports ##
-from random import random
+from random import random, seed
 from os import system, name
 from time import sleep
 from dodfun import cls, rnd, delay, playerObject, monsterObject, levelObject,showFile
@@ -30,6 +30,68 @@ def getLevels():
 		if (levels >0) and (levels <= 5):
 			deep = 1
 	return(levels)
+
+def getIndex(x,y,columns):
+	i=x+(columns*y)
+	return(i)
+
+def createGrid(x,y):
+	grid=[]
+	for i in range(0,x*y):
+		grid.append(i)
+	return(grid)
+
+def fillArray(col,row):
+	grid	= createGrid(col,row)
+	n		= 0
+	for y in range(1,col):
+		for x in range(1,row):
+			i = getIndex(x,y,col)
+			grid[i] = int(rnd()*7+1)	# Returns 1-7
+	
+	h	= int(rnd()*3+1)				# Returns 1-3
+	
+	for n in range(1,h+1):
+		x	= int(rnd()*col)
+		y	= int(rnd()*row)
+		i	= getIndex(x,y,col)
+		grid[i]	= 8		# Trap doors?
+		
+	s	= int(rnd()*4+1)+2
+
+	for n in range(1,s+1):
+		x	= int(rnd()*8+1)
+		y	= int(rnd()*8+1)
+		i	= getIndex(x,y,col)
+		grid[i]	= 9		# Stairs Up?
+	return(grid)
+	
+def fillMap(lvl):
+	global level
+
+	seed()
+	n	= 0
+	for y in range(1,9):
+		for x in range(1,9):
+			i = level[lvl].getIndex(x,y)
+			level[lvl] = int(rnd()*7+1)
+		
+	h	= int(rnd()*3+1)
+	
+	for n in range(1,h+1):
+		x	= int(rnd()*9)
+		y	= int(rnd()*9)
+		i	= self.getIndex(x,y)
+		level[lvl]	= 8
+		
+	s	= int(rnd()*4+1)+2
+		
+	for n in range(1,s+1):
+		x	= int(rnd()*8+1)
+		y	= int(rnd()*8+1)
+		i	= self.getIndex(x,y)
+		level[lvl]	= 9
+	return
 	
 def getName():
 	n = input("Enter your character's name > ")
@@ -141,7 +203,7 @@ def flourish():				# This needs to be re-done
 
 def showMap():		# Line 1570 & 1990
 	cls()
-	if (player.hasmap == False):
+	if (player.hasmap == False) and debug == False:
 		print("You pat your pockets looking for your map")
 		print("before you remember you don't have one.")
 		delay(1)
@@ -175,6 +237,8 @@ def showMap():		# Line 1570 & 1990
 					elif s1 == 9:
 						print("UP ",end=" ")
 			print("\n")
+	if debug:
+		level[currentlevel].showMap()
 	dummy = input("~~Press Enter to Continue~~")
 	return
 
@@ -919,6 +983,8 @@ def showCommands():
 	print(f'{player.name}, what is your action or move?')
 	print("(N)orth, (E)ast, (S)outh, (W)est")
 	print("(U)p, (M)ap")
+	if debug:
+		print("($)Give map & Key  (1) Show raw level")
 	return
 
 def showLevels():	# I can probably get rid of this
@@ -968,12 +1034,19 @@ while gameloop:
 		maxlevel		= currentlevel
 		for i in range(1,currentlevel):
 			level[i].createMap()
-			level[i].fillMap()
+#			level[i].fillMap()
+			level[i].map = fillArray(9,9)
+#			fillMap(i)
+#			if debug:
+#				level[i].showMap()
+#				print(f"Making map for level {i}")
+#				print(level[i])
 		player.x				= int(rnd()*8+1)
 		player.y				= int(rnd()*8+1)
 		teleportactive			= False
 		index					= level[currentlevel].getIndex(player.x,player.y)
-		level[2].setMap(player.x,player.y,1)
+#		level[2].setMap(player.x,player.y,1)
+		level[currentlevel].setMap(player.x,player.y,1)
 		player.movesdepleted	= False
 		player.movesleft		= 100
 		player.hasmap			= False
@@ -1055,8 +1128,15 @@ while gameloop:
 		goUpstairs()
 	elif pmove.upper()	== 'M':
 		showMap()
-	elif pmove.upper()	== 'Z':
-		showMap()
+	elif pmove == '$' and (debug == True):
+		print("*Poof*")
+		player.hasmap = True
+		player.haskey = True
+	elif pmove == '!' and (debug == True):
+		px = input("Show map for which level? ")
+		px = int(px)
+		level[px].showMap()
+		px = input("Hit Enter")
 	elif pmove.upper()	== 'Q':
 		quit()
 	print(" ")

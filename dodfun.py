@@ -2,7 +2,7 @@
 # Functions for Dungeons of Doom
 # that are helpful.
 from os import system, name
-from random import random
+from random import random, seed
 from time import sleep
 
 debug = False
@@ -156,6 +156,7 @@ class levelObject:
 		return
 		
 	def fillMap(self):
+		seed()
 		n	= 0
 		for y in range(1,self.mx):
 			for x in range(1,self.my):
