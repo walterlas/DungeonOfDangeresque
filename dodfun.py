@@ -87,6 +87,12 @@ class playerObject:
 		playerObject.y			= d
 		return
 
+	def didMove():
+		if (playerObject.x == playerObject.oldx) and (playerObject.y == playerObject.oldy):
+			return False
+		else:
+			return True
+			
 class monsterObject:
 	name	= 'monster'
 	hp		= 1

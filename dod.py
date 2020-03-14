@@ -670,14 +670,16 @@ def nsCorridor():	# Line 1660
 	cls()
 	print("You are in a North-South corridor")
 	print("You can only go North or South.")
-	corridor()
+	if player.didMove():
+		corridor()
 	return
 
 def ewCorridor():	# Line 1620
 	cls()
 	print("You are in an East-West corridor")
 	print("You can only go East or West")
-	corridor()
+	if player.didMove():
+		corridor()
 	return
 	
 def findVial():	# Line 4210
@@ -978,7 +980,7 @@ def showCommands():
 		print(f"Player X = {player.x}   Player Y = {player.y}  Room Type = {inroom} Level = {currentlevel}")
 		print(f"Monsters Killed (level)= {player.monsterskilled}  Monsters Killed (total) = {player.totalkills}")
 		print(f"Has Key = {player.haskey}  Has Map = {player.hasmap}")
-		print("\n\n")
+		print("\n")
 	print(f'Hit Points: {player.hp}  Gold: {player.gold}')
 	print(f'{player.name}, what is your action or move?')
 	print("(N)orth, (E)ast, (S)outh, (W)est")
@@ -1085,8 +1087,9 @@ while gameloop:
 		introBottom()
 		inroom 					= level[currentlevel].roomContents(player.x,player.y)
 		newgame					= False
+		firstrun				= True
 	cls()
-	
+
 	if		inroom	== 1:
 		emptyChamber()
 	elif	inroom	== 2:
@@ -1096,9 +1099,15 @@ while gameloop:
 	elif	inroom	== 5:
 		thief()
 	elif	inroom	== 6:
-		nsCorridor()
+		if player.didMove():
+			nsCorridor()
+		else:
+			nsCorridorMsg()
 	elif	inroom	== 7:
-		ewCorridor()
+		if player.didMove():
+			ewCorridor()
+		else:
+			ewCorridorMsg()
 	elif	inroom	== 8:
 		trapDoor()			# GOTO 2610
 	elif	inroom	== 9:
