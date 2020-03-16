@@ -92,7 +92,13 @@ class playerObject:
 			return False
 		else:
 			return True
-			
+	
+	def hasMoved():
+		if (playerObject.x == playerObject.oldx) and (playerObject.y == playerObject.oldy):
+			return False
+		else:
+			return True
+	
 class monsterObject:
 	name	= 'monster'
 	hp		= 1
@@ -104,7 +110,13 @@ class monsterObject:
 		if monsterObject.hp <= 0:
 			dead = True
 		return
-
+	
+	def decHM(x):
+		monsterObject.hm = monsterObject.hm - x
+		if monsterObject.hm <= 0:
+			monsterObject.dead = True
+		return
+		
 class levelObject:
 
 	map		= []

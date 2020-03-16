@@ -20,6 +20,109 @@ gameloop= True
 difficulty	= 1
 maxlevels	= 10
 
+def attackMonster():
+	global monster
+	
+	cls()
+	delay(1)
+	print(f"You attack the. . . {monster.name}")
+	delay(1)
+	print("With a swing of your sword")
+	n	= int(rnd()*5+1)+int(rnd()*player.monsterskilled/2+1)
+	monster.decHM(n)
+	if monster.dead:
+		deadMonster()
+		return(monster.hm)
+	print(f"You do {n} hit-points of damage")
+	delay(1)
+	print(f"It has . . {monster.hm} hit-points left")
+	delay(1)
+	return(monster.hm)
+	
+def flee():
+	global player
+	
+	w	= int(rnd()*4+1)
+	player.x	= player.oldx
+	player.y	= player.oldy
+	print("You decide to make a strategic withdrawal. . . ")
+	if teleportactive:
+		teleportTrap()
+	n	= int(rnd()*2+1)
+	delay(1)
+	if (w >= 3):
+		player.decHP(n)
+		print(f"As you leave. . . ")
+		print(f"the {monster.name} attacks")
+		delay(1)
+		print(f"And it does {n} hit-points of damage")
+		delay(1)
+	return
+	
+def fightOrFlee():
+	print("")
+	f = input("Will you (F) or (R)un? ")
+	return(f)
+	
+def doBattle():
+	battleloop	= True
+	delay(1)
+	print(" ")
+	w	= int(rnd()*4+1)
+	if (w > 2):
+		monsterAttacks()
+		if player.dead:
+			battleloop = False
+			return
+	while battleloop:
+		f	= fightOrFlee()
+		if f.upper() == 'F':
+			check	= attackMonster()
+			if (check <= 0):
+				battleloop = False
+				continue
+			else:
+				monsterAttacks()
+				if player.dead:
+					battleloop = False
+					return
+		else:
+			flee()
+			battleloop = False
+	return
+	
+def occupiedCavern():
+	global monster
+	
+	if (inroom == 4):
+		w	= int(rnd()*15+1)+15
+	else:
+		w	= int(rnd()*15+1)
+	
+	print("There is something lurking. . . ")
+	print(". . . . in this chamber . . . . ")
+	delay(1)
+	print(". . . . . . . . . Beware")
+	delay(1)
+	print("")
+	monster.name	= monsterInfo[0][w]
+	monster.hp		= monsterInfo[1][w]
+	monster.hm		= monsterInfo[2][w]
+	print(f"It is a . . . . . {monster.name} . . ")
+	delay(1)
+	doBattle()
+	return
+	
+def emptyChamber():
+	w	= int(rnd()*2+1)
+	if (w == 2):
+		print("You are in a damp and misty. . . . ")
+		print(". . . . empty chamber.")
+	else:
+		print("You are in a cold and dark. . . . ")
+		print(". . . . empty chamber.")
+	return
+	
 def findVial():
 	global player
 	
@@ -51,7 +154,25 @@ def findVial():
 				print("It was a white magic potion. . . ")
 				print(f"Which restored you hit-points by {h}")
 			elif (dl == 2):
-			
+				print("The liquid has no effect on you.")
+			else:
+				h	= int(rnd()*6+1)*difficulty
+				h	= int(h)
+				player.decHP(h)
+				print("You feel a little funny. . . ")
+				delay(2)
+				print("\nIt was a black magic potion. . .")
+				print(f"Which decreased your hit-points by {h}.')
+				if player.dead:
+					print("It kind of killed you.")
+		return
+
+def somethingJumps():
+	cls()
+	print("Suddenly. . . Something jumps. . . ")
+	print("in front of you . . . . . ")
+	delay(2)
+	return
 		
 def giantSpider():
 	global monster
@@ -187,6 +308,7 @@ while gameloop:
 ##	Show what room player is in 
 		if (inroom == 1):		# Empty chamber
 			emptyChamber()		# 	Nothing happens here
-		if (inroom == 2):		# Hidden Cavern
+		elif (inroom == 2):		# Hidden Cavern
 			hiddenCavern()
-
+		elif (inroom ==3 ) or (inroom == 4):
+			occupiedCavern()
