@@ -20,6 +20,39 @@ gameloop= True
 difficulty	= 1
 maxlevels	= 10
 
+def findVial():
+	global player
+	
+	print("You look around . . . ")
+	delay(2)
+	v	= int(rnd()*7+1)
+	if (v < 5):
+		print(". . . but you don't see anything interesting.")
+	else:
+		print("On the ground, at your feet, is a vial.")
+		delay(2)
+		print("You pick up the vial. . and see that")
+		print("It contains . . . a milky liquid.")
+		Print("Would like a drink?")
+		d	= input("Enter (Y)es or (N)o: ")
+		dl	= int(rnd()*6+)
+		if d.upper() == 'N':
+			print("You think maybe drinking strange 'milky' liquids")
+			print("in strange vials lying on the ground is a bad ")
+			print("idea and you put it down.")
+			return
+		else:
+			print("You take a swig. . . ")
+			delay(3)
+			if (dl >= 3):
+				h	= int(rnd()*10/difficulty+1)+(6/difficulty)
+				h	= int(h)
+				player.incHP(h)
+				print("It was a white magic potion. . . ")
+				print(f"Which restored you hit-points by {h}")
+			elif (dl == 2):
+			
+		
 def giantSpider():
 	global monster
 
