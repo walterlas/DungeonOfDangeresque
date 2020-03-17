@@ -48,6 +48,7 @@ class playerObject:
 	movesdepleted	= False
 	startinghp		= 0
 	healthturn		= 0
+	deathreason		= " "
 	
 	def decHP(x):
 		playerObject.hp = playerObject.hp - x
@@ -108,7 +109,7 @@ class monsterObject:
 	def decHP(x):
 		monsterObject.hp	= monsterObject.hp - x
 		if monsterObject.hp <= 0:
-			dead = True
+			monsterObject.dead = True
 		return
 	
 	def decHM(x):
